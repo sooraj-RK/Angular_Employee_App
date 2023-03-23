@@ -7,21 +7,21 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
 
-  constructor(private _http:HttpClient) { }
+  constructor(private _http: HttpClient) { }
 
-  addEmployee(data: any): Observable<any>{
-    return this._http.post('http://localhost:3000/employees',data);
+  addEmployee(data: any): Observable<any> {
+    return this._http.post('http://localhost:3000/employees', data);
   }
 
-  updateEmployee(id:number ,data: any): Observable<any>{
-    return this._http.post(`http://localhost:3000/employees/${id}`,data);
+  updateEmployee(id: number, data: any): Observable<any> {
+    return this._http.put(`http://localhost:3000/employees/${id}`, data);
   }
 
-  getEmployeeList(): Observable<any>{
+  getEmployeeList(): Observable<any> {
     return this._http.get('http://localhost:3000/employees');
   }
 
-  deleteEmployee(id:number): Observable<any>{
+  deleteEmployee(id: number): Observable<any> {
     return this._http.delete(`http://localhost:3000/employees/${id}`);
   }
 }

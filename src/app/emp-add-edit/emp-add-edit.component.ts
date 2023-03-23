@@ -1,6 +1,7 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CoreService } from '../core/core/core.service';
 import { EmployeeService } from '../services/employee.service';
 
 @Component({
@@ -8,8 +9,9 @@ import { EmployeeService } from '../services/employee.service';
   templateUrl: './emp-add-edit.component.html',
   styleUrls: ['./emp-add-edit.component.css']
 })
-export class EmpAddEditComponent {
+export class EmpAddEditComponent implements OnInit {
   empForm: FormGroup;
+
   education: string[] = [
     'matric',
     'Diploma',
@@ -21,7 +23,8 @@ export class EmpAddEditComponent {
   constructor(private _fb: FormBuilder,
      private _empService:EmployeeService,
      private _dialogRef:MatDialogRef<EmpAddEditComponent>,
-     @Inject(MAT_DIALOG_DATA) public data:any
+     @Inject(MAT_DIALOG_DATA) public data:any,
+     private _coreService:CoreService
      ) {
     this.empForm = this._fb.group({
       firstName: '',
@@ -47,27 +50,28 @@ export class EmpAddEditComponent {
         .updateEmployee(this.data.id,this.empForm.value)
         .subscribe({
           next: (val: any) => {
-            alert('employee details updated');
+            this._coreService.openSnackBar('employee details updated')
             this._dialogRef.close(true);
           },
           error: (err:any) => {
-            console.log(err);
+            console.error(err);
           
           },
          });
     
       }
-      }else{
+      else{
      this._empService.addEmployee(this.empForm.value).subscribe({
       next: (val: any) => {
-        alert('employee added successfully');
+        this._coreService.openSnackBar('employee added successfully')
         this._dialogRef.close(true);
       },
       error: (err:any) => {
-        console.log(err);
+        console.error(err);
       
       }
-     })
+     });
+    }
 
     }
   }
